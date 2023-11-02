@@ -7,7 +7,7 @@ jobs:
     defaults:
         run:
             shell: bash
-            working-directory: .on: [push]
+            working-directory: .
         steps:
             - name: Checkout repo to runner
               uses: actions/checkout@v3
