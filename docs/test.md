@@ -7,4 +7,4 @@ This is a test for making sure the rules work!
 
 A heading should not end with a '.'
 
-thus is just a Multus reference!
+## 01-another heading.
