@@ -1,0 +1,46 @@
+name: Track Issue Response Time
+
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  track-response-time:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up timestamp for new issue
+        if: github.event_name == 'issues'
+        run: echo "${{ github.event.issue.number }},${{ github.event.issue.created_at }}" >> .github/response_times.csv
+
+      - name: Calculate response time on first comment
+        if: github.event_name == 'issue_comment'
+        run: |
+          ISSUE_NUMBER=${{ github.event.issue.number }}
+          COMMENT_TIME=${{ github.event.comment.created_at }}
+          CSV_FILE=".github/response_times.csv"
+
+          if grep -q "$ISSUE_NUMBER" "$CSV_FILE"; then
+            ISSUE_TIME=$(grep "$ISSUE_NUMBER" "$CSV_FILE" | cut -d ',' -f 2)
+            START_TIME=$(date -d "$ISSUE_TIME" +%s)
+            END_TIME=$(date -d "$COMMENT_TIME" +%s)
+            RESPONSE_TIME=$((END_TIME - START_TIME))
+
+            echo "Issue #$ISSUE_NUMBER response time: $RESPONSE_TIME seconds"
+            echo "$ISSUE_NUMBER,$ISSUE_TIME,$COMMENT_TIME,$RESPONSE_TIME" >> .github/response_log.csv
+          fi
+
+      - name: Commit response time data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/response_times.csv .github/response_log.csv
+          git commit -m "Update response time log"
+          git push
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
