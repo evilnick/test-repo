@@ -5,7 +5,8 @@ on:
     types: [opened]
   issue_comment:
     types: [created]
-
+permissions:
+  contents: write
 jobs:
   track-response-time:
     runs-on: ubuntu-latest
