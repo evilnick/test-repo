@@ -41,6 +41,3 @@ jobs:
           git add .github/response_times.csv .github/response_log.csv
           git commit -m "Update response time log"
           git push
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
