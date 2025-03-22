@@ -23,9 +23,10 @@ jobs:
             docs/**.md
       - name: Run Lychee Link Checker
         id: lychee
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
         uses: lycheeverse/lychee-action@v1
         with:
-          args: --config lychee.toml ${{  steps.changed-md-files.outputs.changed_files }}
+          args: --config lychee.toml ${{  steps.changed-markdown-files.outputs.all_changed_files }}
       - name: PR comment with file
         uses: thollander/actions-comment-pull-request@v3
         with:
