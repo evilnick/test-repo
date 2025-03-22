@@ -24,7 +24,7 @@ jobs:
       - name: Run Lychee Link Checker
         id: lychee
         if: steps.changed-markdown-files.outputs.any_changed == 'true'
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@a99389aeff3c193ffb6f0741178e519569d3f404
         with:
           args: --config lychee.toml ${{  steps.changed-markdown-files.outputs.all_changed_files }}
       - name: PR comment with file
